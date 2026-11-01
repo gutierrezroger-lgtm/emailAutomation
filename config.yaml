@@ -1,0 +1,65 @@
+# Configuración de la automatización de emails.
+# Puedes editar este archivo sin tocar el código.
+# Las direcciones se comparan en minúsculas. Para un dominio entero usa "@dominio.com".
+
+timezone: Europe/Madrid
+run_hour: 10            # hora local de ejecución y de corte de la ventana (ayer 10:00 -> hoy 10:00)
+
+# Siempre importantes (se notifican aunque sean "noreply" o newsletters).
+vip:
+  - noreply@ads.amazon.com
+  - matias@libertadeditorial.com
+  - no-reply@email.claude.com
+  - noreply@skool.com
+
+# Siempre ignorados (nunca se notifican).
+ignore:
+  - notifications@tx.teachable.com   # comentarios de la academia (se revisan en Teachable)
+  # - "@linkedin.com"
+
+# Categorías de Gmail que se descartan directamente (salvo VIP).
+discard_categories:
+  - promotions
+  - social
+  - forums
+
+# Palabras que delatan un aviso de seguridad o de cuenta en emails automáticos.
+# Si un email automático contiene alguna, lo revisa la IA en vez de descartarlo.
+security_keywords:
+  - seguridad
+  - inicio de sesión
+  - iniciado sesión
+  - contraseña
+  - verificación
+  - código de verificación
+  - acceso
+  - dispositivo nuevo
+  - actividad sospechosa
+  - cuenta suspendida
+  - renovación
+  - caduca
+  - vence
+  - expira
+  - dominio
+  - hosting
+  - certificado ssl
+  - security
+  - sign-in
+  - sign in
+  - login
+  - password
+  - verification
+  - 2fa
+  - two-factor
+  - suspicious
+  - new device
+  - account
+  - expires
+  - expiring
+  - renewal
+  - domain
+  - suspended
+
+# Modelo de Claude que clasifica y número máximo de caracteres del fragmento enviado.
+model: claude-haiku-5-5
+snippet_chars: 300

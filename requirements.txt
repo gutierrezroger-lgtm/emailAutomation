@@ -1,0 +1,5 @@
+anthropic>=0.75
+pydantic>=2
+requests>=2.31
+pyyaml>=6
+beautifulsoup4>=4.12

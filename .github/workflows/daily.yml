@@ -1,0 +1,49 @@
+name: Resumen diario de emails
+
+on:
+  schedule:
+    # 10:00 en Madrid: 08:00 UTC en horario de verano, 09:00 UTC en invierno.
+    # main.py descarta el cron que no corresponde según la fecha.
+    - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Solo mostrar en los logs, sin enviar a Telegram"
+        type: boolean
+        default: true
+      since:
+        description: 'Inicio de ventana opcional, formato "YYYY-MM-DD HH:MM" (hora de Madrid)'
+        type: string
+        required: false
+
+concurrency:
+  group: email-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Analizar emails y enviar resumen
+        run: python main.py
+        env:
+          GITHUB_SCHEDULE: ${{ github.event.schedule }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SINCE: ${{ inputs.since }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
